@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import androidx.lifecycle.Lifecycle
+import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -24,6 +25,14 @@ class NavigationTest {
 
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
+
+    @Test
+    fun testAbout() {
+        launchActivity<MainActivity>()
+        openAbout()
+        onView(withId(R.id.activity_about))
+            .check(matches(isDisplayed()))
+    }
 
     @Test
     fun testFragment1() {
@@ -118,7 +127,7 @@ class NavigationTest {
         onView(withId(R.id.bnToSecond)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToFirst)).check(matches(isDisplayed()))
         openAbout()
-        onView(withId(R.id.activity_main)).check(matches(isDisplayed()))
+        onView(withId(R.id.activity_main)).check(doesNotExist())
         onView(withId(R.id.activity_about)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToFirst)).check(doesNotExist())
         onView(withId(R.id.bnToSecond)).check(doesNotExist())
