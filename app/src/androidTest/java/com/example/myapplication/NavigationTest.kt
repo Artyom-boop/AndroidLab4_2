@@ -86,6 +86,8 @@ class NavigationTest {
         onView(withId(R.id.bnToThird)).perform(click())
         onView(withId(R.id.bnToFirst)).perform(click())
         onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withId(R.id.bnToFirst)).perform(click())
+        onView(withId(R.id.bnToSecond)).perform(click())
         onView(withId(R.id.bnToThird)).perform(click())
         openAbout()
         pressBack()
@@ -97,18 +99,27 @@ class NavigationTest {
 
     @Test
     fun testButtonAndView() {
+        onView(withId(R.id.activity_main)).check(matches(isDisplayed()))
+        onView(withId(R.id.fragment1)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToFirst)).check(doesNotExist())
         onView(withId(R.id.bnToSecond)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToThird)).check(doesNotExist())
+        onView(withId(R.id.bnToSecond)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withId(R.id.activity_main)).check(matches(isDisplayed()))
+        onView(withId(R.id.fragment2)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToSecond)).check(doesNotExist())
         onView(withId(R.id.bnToFirst)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToThird)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToThird)).perform(click())
+        onView(withId(R.id.activity_main)).check(matches(isDisplayed()))
+        onView(withId(R.id.fragment3)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToThird)).check(doesNotExist())
         onView(withId(R.id.bnToSecond)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToFirst)).check(matches(isDisplayed()))
         openAbout()
+        onView(withId(R.id.activity_main)).check(matches(isDisplayed()))
+        onView(withId(R.id.activity_about)).check(matches(isDisplayed()))
         onView(withId(R.id.bnToFirst)).check(doesNotExist())
         onView(withId(R.id.bnToSecond)).check(doesNotExist())
         onView(withId(R.id.bnToThird)).check(doesNotExist())
@@ -137,5 +148,29 @@ class NavigationTest {
         pressBack()
         pressBackUnconditionally()
         assertTrue(activityRule.scenario.state.isAtLeast(Lifecycle.State.DESTROYED))
+    }
+
+    @Test
+    fun recreateFragment1() {
+        onView(withId(R.id.fragment1)).check(matches(isDisplayed()))
+        activityRule.scenario.recreate()
+        onView(withId(R.id.fragment1)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun recreateFragment2() {
+        onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withId(R.id.fragment2)).check(matches(isDisplayed()))
+        activityRule.scenario.recreate()
+        onView(withId(R.id.fragment2)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun recreateFragment3() {
+        onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withId(R.id.bnToThird)).perform(click())
+        onView(withId(R.id.fragment3)).check(matches(isDisplayed()))
+        activityRule.scenario.recreate()
+        onView(withId(R.id.fragment3)).check(matches(isDisplayed()))
     }
 }
